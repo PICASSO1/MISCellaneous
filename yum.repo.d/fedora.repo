@@ -1,0 +1,32 @@
+[fedora]
+name=Fedora 16 - i386
+failovermethod=priority
+#baseurl=http://download.fedoraproject.org/pub/fedora/linux/releases/16/Everything/i386/os/
+baseurl=http://ftp.cuhk.edu.hk/pub/linux/fedora-archive/fedora/linux/releases/16/Everything/i386/os/
+#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&arch=$basearch
+enabled=1
+metadata_expire=7d
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$basearch
+
+[fedora-debuginfo]
+name=Fedora 16 - i386 - Debug
+failovermethod=priority
+#baseurl=http://download.fedoraproject.org/pub/fedora/linux/releases/16/Everything/i386/debug/
+baseurl=http://ftp.cuhk.edu.hk/pub/linux/fedora-archive/fedora/linux/releases/16/Everything/i386/os/
+#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-debug-$releasever&arch=$basearch
+enabled=0
+metadata_expire=7d
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$basearch
+
+[fedora-source]
+name=Fedora 13 - i386
+failovermethod=priority
+#baseurl=http://download.fedoraproject.org/pub/fedora/linux/releases/16/Everything/i386/SRPMS/
+baseurl=http://ftp.cuhk.edu.hk/pub/linux/fedora-archive/fedora/linux/releases/16/Everything/i386/os/
+#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-source-$releasever&arch=$basearch
+enabled=0
+metadata_expire=7d
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$basearch

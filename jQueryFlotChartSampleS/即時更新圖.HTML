@@ -1,0 +1,118 @@
+﻿<!DOCUMENT html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN http://www.w3.prg/TR/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Big5" />
+<meta http-equiv="Pragma" content="no_cache" />
+<meta http-equiv="refresh" content="60"/>
+<title>即時更新圖</title>
+<script type="text/javascript" src="./js/jQuery/jquery-1.8.3.min.js"></script>
+<link rel=StyleSheet type="text/css" href="./css/style.min-1.0.0.css" />
+<script type="text/javascript" src="./js/jQuery/excanvas.min.js" language="JavaScript"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.min.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.symbol.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.axislabels.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.time.js"></script>
+<script type="text/javascript" src="./js/jQuery/jshashtable-2.1.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.numberformatter-1.2.3.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+var data = [];
+var dataset;
+var totalPoints = 100;
+var updateInterval = 1000;
+var now = new Date().getTime();
+
+function GetData() {
+	data.shift();
+
+	while (data.length < totalPoints) {
+		var y = Math.random() * 100;
+		var temp = [now += updateInterval, y];
+		data.push(temp);
+	}
+}
+
+var options = {
+	series: {
+		lines: {
+			show: true,	// 是否要顯示更新圖表
+			lineWidth: 1.2,	// 圖表外圍的框線厚度....
+			fill: true	// 是否要填滿
+		}
+	},
+	xaxis: {
+		mode: "time",	// X軸的顯示模示為"時間"
+		tickSize: [2, "second"],	// 刻度為每2秒一個刻度
+		tickFormatter: function (v, axis) {	// 顯示刻度的格式為：每20秒才顯示出來
+			var date = new Date(v);
+			if (date.getSeconds() % 20 == 0) {
+				var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+				var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+				var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+
+				return hours + ":" + minutes + ":" + seconds;
+			}
+			else
+				return "";
+		},
+		axisLabel: "Time",	// X軸的標籤名稱
+		axisLabelUseCanvas: true,	// 是否要使用Canvas
+		axisLabelFontSizePixels: 12,	// X軸標籤名稱的字體大小
+		axisLabelFontFamily: 'Verdana, Arial',	// X軸標籤名稱的字型
+		axisLabelPadding: 10	// X軸標籤名稱，要離Y軸底部多遠
+	},
+	yaxis: {
+		min: 0,	// Y軸的最小單位
+		max: 100,	// Y軸的最大單位
+		tickSize: 5,	// 每5單位一個刻度
+		tickFormatter: function (v, axis) {	// 顯示刻度的格式為：每10單位才顯示出來
+			if (v % 10 == 0)
+				return v + "%";
+			else
+				return "";
+		},
+		axisLabel: "CPU loading",	// Y軸的標籤名稱
+		axisLabelUseCanvas: true,	// 是否要使用Canvas
+		axisLabelFontSizePixels: 12,	// X軸標籤名稱的字體大小
+		axisLabelFontFamily: 'Verdana, Arial',	// X軸標籤名稱的字型
+		axisLabelPadding: 6	// X軸標籤名稱，要離Y軸底部多遠
+	},
+	legend: {
+		labelBoxBorderColor: "#000000",
+		position: "nw"	// 小標籤要呈現在表格的那裡?? nw: 左上；ne: 右上；se: 右下；sw: 左下
+	},
+	grid: {
+		backgroundColor: "#000000",	// 整張圖表的背景顏色
+		tickColor: "#008040"	// 刻度的顏色
+	}
+};
+</script>
+</head>
+<body>
+	<div id="flot_chart" class="ChartStyle"></div>
+</body>
+<script type="text/javascript" language="JavaScript">
+	(function($) {
+		$(window.document).ready(function () {
+			GetData();
+
+			dataset = [
+				{
+					label: "CPU",
+					data: data,
+					color: "#00FF00"
+				}
+			];
+
+			$.plot($("#flot_chart"), dataset, options);
+
+			function update() {
+				GetData();
+				$.plot($("#flot_chart"), dataset, options)
+        setTimeout(update, updateInterval);
+			}
+			update();
+		});
+		return;
+	})(jQuery);
+</script>
+</html>

@@ -1,0 +1,290 @@
+﻿ <!DOCUMENT html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN http://www.w3.prg/TR/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Big5" />
+<meta http-equiv="Pragma" content="no_cache" />
+<meta http-equiv="refresh" content="60"/>
+<title>失敗案例.HTML</title>
+<script type="text/javascript" src="./js/jQuery/jquery-1.8.3.min.js"></script>
+<link rel=StyleSheet type="text/css" href="./css/style.min-1.0.0.css" />
+<script type="text/javascript" src="./js/jQuery/excanvas.min.js" language="JavaScript"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.min.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.symbol.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.axislabels.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.time.js"></script>
+<script type="text/javascript" src="./js/jQuery/jshashtable-2.1.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.numberformatter-1.2.3.min.js"></script>
+<!--<script type="text/javascript" src="./js/jQuery/jquery.flot.stack.js"></script>//-->
+<script type="text/javascript" src="./js/jQuery/jquery.flot.pie.js"></script>
+<script type="text/javascript" language="JavaScript">
+// 直條圖、橫條圖、堆疊直條圖、堆疊橫條圖、多軸圖、即時更新圖、區域圖、堆疊折線圖、甜甜圈圖、傾斜圓餅圖、圓餅圖、折線圖、雙折線圖
+//===============X軸刻度的資料：[index, value]===============
+var Xticks = [
+	[00, 00], [01, 01], [02, 02], [03, 03], [04, 04], [05, 05], [06, 06], [07, 07], [08, 08], [09, 09], [10, 10], [11, 11], [12, 12], [13, 13], [14, 14],
+	[15, 15], [16, 16], [17, 17], [18, 18], [19, 19], [20, 21], [21, 21], [22, 22], [23, 23], [24, 24], [25, 25], [26, 26], [27, 27], [28, 28], [29, 29],
+	[30, 30]
+];
+
+//===============X軸每一刻度的資料：[index, value]===============
+var data1 = [
+	[00, 0], [01, 1018], [02, 1020], [03, 1016], [04, 1022], [05, 1023], [06, 1029], [07, 1060], [08, 1069], [09, 1034], [10, 0], [11, 1023],
+	[12, 1022], [13, 1026], [14, 1027], [15, 1023], [16, 1019], [17, 1032], [18, 1029], [19, 0], [20, 1015], [21, 1017], [22, 1023], [23, 1024],
+	[24, 1024], [25, 0], [26, 1031], [27, 1023], [28, 1019], [29, 1008], [30, 993]
+];
+
+var data2 = [
+	[00, 1012], [01, 40], [02, 30], [03, 20], [04, 10], [05, 10], [06, 20], [07, 0], [08, 0], [09, 0], [10, 1034], [11, 30],
+	[12, 10], [13, 10], [14, 20], [15, 30], [16, 40], [17, 10], [18, 10], [19, 1017], [20, 30], [21, 20], [22, 10], [23, 10],
+	[24, 20], [25, 1022], [26, 0], [27, 0], [28, 40], [29, 30], [30, 20]
+];
+
+var data3 = [
+	[00, 11], [01, 9], [02, 7], [03, 13], [04, 11], [05, 11], [06, 9], [07, 10], [08, 7], [09, 11], [10, 7], [11, 6], [12, 4], [13, 5],
+	[14, 11], [15, 8], [16, 9], [17, 16], [18, 11], [19, 18], [20, 8], [21, 17], [22, 11], [23, 13], [24, 11], [25, 11], [26, 9], [27, 8],
+	[28, 7], [29, 8], [30, 20]
+];
+
+var dataset = [
+	{
+		label: "Sea Level Pressure",	// 小標籤的文字描述
+		data: data1,	// 要帶的是那一筆資料
+		color: "#0077FF",	// 小標籤，及直條圖外框的顏色
+	//xaxis: 1,	// 這一組資料要對應到xaxis的序號1
+		bars: {	// 此一參數適用於條狀圖
+			show: true,
+			align: "center",	// X軸的刻度標的，要顯示在直條圖的那一邊??
+			barWidth: 0.75,	// 直條圖的寬度；此一參數與option.bars.barWidth相同
+			lineWidth: 1	// 條狀圖外框的厚度；此一參數與option.bars.lineWidth相同
+		}
+	},
+	{
+		label: "(None)",	// 小標籤的文字描述
+		data: data2,	// 要帶的是那一筆資料
+		color: "#ED7B00",	// 小標籤，及直條圖外框的顏色
+	//xaxis: 1,	// 這一組資料也要對應到xaxis的序號1 (因為是堆疊直線圖)
+		bars: {
+			show: true,
+			align: "center",	// X軸的刻度標的，要顯示在直條圖的那一邊??
+			barWidth: 0.75,	// 直條圖的寬度；此一參數與option.bars.barWidth相同
+			lineWidth: 1	// 條狀圖外框的厚度；此一參數與option.bars.lineWidth相同
+		}
+	},
+	{
+		label: "Wind Speed",
+		data: data3,
+		color: "#0062FF",
+		yaxis: 2,
+		bars: {
+			show: false
+		},
+		points: {	// 節點設定，此一系列的參數僅適用於折線圖系列
+			symbol: "triangle",	// 節點以三角形方式呈現
+			fillColor: "#0062FF",	// 該節點要什麼顏色來填滿??
+			show: true	// 是否要顯示該節點
+		},
+		lines: {	// 節點與節點之間的線條；此一系列的參數亦僅適用於折線圖系列
+			show:true	// 是否要呈現出來??
+		}
+	}
+];
+
+var options = {
+	series: {
+	//stack: false,	// 要使用堆疊圖....
+		bars: {	// 適用於條狀圖
+			show: true	// true: 直條圖；false: 曲線圖
+		},
+		shadowSize: 10	// 曲線的陰影大小
+		/*
+		lines: {	// 線條設定，適用於即時更新圖和折線圖系列
+			show: true,	// 是否要顯示線條
+			lineWidth: 1.2,	// 線條的厚度
+			fill: true	// 是否要填滿
+		}
+		*/
+		/*
+		pie: {	// 此一系列參數，僅適用於圓餅圖系列....
+			show: true,	// true代表要用圓餅圖的方式來呈現
+			tilt: 0.5,	// 此一參數僅適用於傾斜圓餅圖，代表傾斜的程度；0.5剛剛好；0是消失不見；1是整個平面!!
+			innerRadius: 0.3,	// 此一參數僅適用於圖，代表甜甜圈的大小
+			label: {
+				show: true,	// 是否要顯示圓餅圖周圍的標籤
+				radius: 180,	// 標籤相對於圓餅圖的位址
+				formatter: function (label, series) {	// 小標籤的樣式
+					return '<div style="border: 1px solid gray; font-size: 13pt; text-align: center; padding: 5px; color: white;">' + label + ' : ' +
+						Math.round(series.percent) + '%</div>';
+				},
+				background: {
+					opacity: 0.9,	// 小標籤的透明度：0~1
+					color: '#000000'	// 小標籤的底色
+				}
+			}
+		}
+		*/
+		/*
+		points: {	// 此一參數僅適用於折線圖....
+			radius: 3,
+			fill: true,	// 是否要??
+			show: true	// 是否要顯示節點??
+		}
+		*/
+	},
+	bars: {
+		align: "center",	// X軸的刻度標的，要顯示在直條圖的那一邊??
+		barWidth: 0.75,	// 直條圖的寬度
+		lineWidth: 1,	// X條圖外框的厚度；但似乎在橫條圖中才有作用....
+		horizontal: false,	// true為橫條圖，false為直條圖；但預設值為false
+		fillColor: {	// 橫條圖中所要填滿的顏色
+			colors: [	// 有兩種顏色代表有漸層；opacity的值表透明度：0~1
+				{
+					opacity: 0.5
+				},
+				{
+					opacity: 1
+				}
+			]
+		},
+		lineWidth: 3	// bar的外框厚度
+	},
+	xaxis: {
+		axisLabel: "Date",	// X軸的標籤名稱
+		axisLabelUseCanvas: true,	// 是否要使用Canvas
+		axisLabelFontSizePixels: 12,	// X軸標籤名稱的字體大小
+		axisLabelFontFamily: 'Verdana, Arial',	// X軸標籤名稱的字型
+		axisLabelPadding: 10,	// X軸標籤名稱，要離Y軸底部多遠
+		ticks: function() {	// X軸的刻度資料：只顯示以3為倍數的日期，其餘的都不顯示!!
+			var virArray = new Array(31);
+			$.each(virArray, function(index, context) {
+				virArray[index] = new Array(2);
+				virArray[index][0] = Xticks[index][0];
+				if (index % 3 === 2) {
+					if (index < 9)
+						virArray[index][1] = "Jul 0" + (Xticks[index][1] + 1);
+					else
+						virArray[index][1] = "Jul " + (Xticks[index][1] + 1);
+				}
+				else
+					virArray[index][1] = "";
+				return;
+			});
+			return virArray;
+		},
+	//tickSize: 3,	// 每3個單位一個刻度，此一參數會與ticks參數衝突
+		tickColor: "gray", // X軸的刻度線條顏色
+	//tickLength: 20	// X軸的刻度，往下延伸要多長?? 此一參數會與tickColor衝突
+		color: "red"	// X軸的刻度文字顏色
+		/*
+		tickFormatter: function(v, axis) {	// 要如何呈現X軸的刻度格式??
+			return $.formatNumber(v, {
+				format: "#,###",
+				locale: "us"
+			});
+		},
+		*/
+	},
+	yaxis: [
+		{
+		position: "left",	// 這一個Y軸座標要顯示在表格的那裡??
+		axisLabel: "Sea Level Pressure (hPa)",	// Y軸的標籤名稱
+		axisLabelUseCanvas: true,	// 是否要使用Canvas
+		axisLabelFontSizePixels: 12,	// Y軸標籤名稱的字體大小
+		axisLabelFontFamily: 'Verdana, Arial',	// Y軸標籤名稱的字型
+		axisLabelPadding: 3,	// Y軸標籤名稱，要離X軸最左邊多遠
+		tickColor: "red",	// Y軸的刻度線條顏色
+		min: 990,
+		max: 1070,
+		color: "blue",	// Y軸的刻度文字顏色
+		tickLength: 10	// Y軸的刻度，要離表格多遠?? 此一參數會與tickColor衝突
+		/*
+		tickFormatter: function (v, axis) {	// 要如何呈現Y軸的刻度格式??
+			return v + "&deg;C";
+		},
+		*/
+		},
+		{
+		position: "right",	// 這一個Y軸座標要顯示在表格的那裡??
+		axisLabel: "Sea Level Pressure (hPa)11111",	// Y軸的標籤名稱
+		axisLabelUseCanvas: true,	// 是否要使用Canvas
+		axisLabelFontSizePixels: 12,	// Y軸標籤名稱的字體大小
+		axisLabelFontFamily: 'Verdana, Arial',	// Y軸標籤名稱的字型
+		axisLabelPadding: 3	// Y軸標籤名稱，要離X軸最左邊多遠
+		}
+	],
+	legend: {
+		noColumns: 0,
+		labelBoxBorderColor: "#000000",	// 小標籤的顏色外框的顏色
+		position: "nw",	// 小標籤要呈現在表格的那裡?? nw: 左上；ne: 右上；se: 右下；sw: 左下
+		labelFormatter: function (label, series) {	// 小標籤裡面的文字顏色
+			return "<font color=\"#FF0000\">" + label + "</font>";
+		},
+		backgroundColor: "#00FF00",	// 小標籤的背景顏色
+		backgroundOpacity: 0.5	// 小標籤背景顏色的透明度
+	},
+	grid: {
+		hoverable: true,	// 當滑鼠游標移至直條圖上時，直條圖是否要變化??
+		borderWidth: 2,	// 整張表格的外框厚度
+		backgroundColor: {	// 整張圖表的漸層顏色，由上至下
+			colors: ["#FFFFFF", "#EDF5FF"]
+		},
+		tickColor: "#000000"	// 刻度的顏色，包函X軸和Y軸；但此一參數效果會被xaxis / yaxis的tickColor效果覆蓋....
+	//axisMargin: 20,	// 不甚清楚這兩個參數在設定什麼....
+	//mouseActiveRadius: 50
+	},
+	colors:["#004078", "#207800", "#613C00"]	// 此一參數適用於折線圖....
+};
+</script>
+<body>
+	<div id="flot_chart" class="ChartStyle2"></div>
+</body>
+<script type="text/javascript" language="JavaScript">
+	(function($) {
+		$(window.document).ready(function () {
+			$.plot($("#flot_chart"), dataset, options);
+			$("#flot_chart").UseTooltip();
+		});
+ 
+		var previousPoint = null, previousLabel = null;
+
+		$.fn.UseTooltip = function () {
+			$(this).bind("plothover", function (event, pos, item) {
+				if (item) {
+					if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
+						previousPoint = item.dataIndex;
+						previousLabel = item.series.label;
+						$("#tooltip").remove();
+
+						var x = item.datapoint[0];
+						var y = item.datapoint[1];
+						var color = item.series.color;
+					//console.log(item.series.xaxis.ticks[x].label);               
+
+						showTooltip(item.pageX, item.pageY, color, "<strong>" + item.series.label + "</strong><br>" + item.series.xaxis.ticks[x].label +
+							" : <strong>" + y + "</strong> hPa");
+					}
+				}
+				else {
+					$("#tooltip").remove();
+					previousPoint = null;
+				}
+			});
+		};
+
+		function showTooltip(x, y, color, contents) {	// 當滑鼠游標移至長條圖上時，所呈現的小提示....
+			$('<div id="tooltip">' + contents + '</div>').css({
+				position: 'absolute',
+				display: 'none',
+				top: y - 40,
+				left: x - 120,
+				border: '2px solid ' + color,	// 小提示的外框厚度
+				padding: '3px',	// 小提示的外框要離文字內容的距離
+				'font-size': '9px',	// 小提示裡的字型大小
+				'border-radius': '5px',
+				'background-color': '#FFFFFF',	// 小提示的背景顏色
+				'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',	// 小提示的字體
+				opacity: 0.9	// 透明度：0~1
+			}).appendTo("body").fadeIn(200);
+		}
+		return;
+	})(jQuery);
+</script>
+</html>

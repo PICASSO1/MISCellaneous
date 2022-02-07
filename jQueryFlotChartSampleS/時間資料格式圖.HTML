@@ -1,0 +1,184 @@
+﻿<!DOCUMENT html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN http://www.w3.prg/TR/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Big5" />
+<meta http-equiv="Pragma" content="no_cache" />
+<meta http-equiv="refresh" content="60"/>
+<title>時間資料格式圖</title>
+<script type="text/javascript" src="./js/jQuery/jquery-1.8.3.min.js"></script>
+<link rel=StyleSheet type="text/css" href="./css/style.min-1.0.0.css" />
+<script type="text/javascript" src="./js/jQuery/excanvas.min.js" language="JavaScript"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.min.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.symbol.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.axislabels.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.time.js"></script>
+<script type="text/javascript" src="./js/jQuery/jshashtable-2.1.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.numberformatter-1.2.3.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+var dayOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat"];
+
+function gd(year, month, day) {
+	return new Date(year, month - 1, day).getTime();
+}
+
+var data1 = [
+	[gd(2013, 1, 2), 1690.25], [gd(2013, 1, 3), 1696.3], [gd(2013, 1, 4), 1659.65], [gd(2013, 1, 7), 1668.15], [gd(2013, 1, 8), 1656.1],
+	[gd(2013, 1, 9), 1668.65], [gd(2013, 1, 10), 1668.15], [gd(2013, 1, 11), 1680.2], [gd(2013, 1, 14), 1676.7], [gd(2013, 1, 15), 1680.7],
+	[gd(2013, 1, 16), 1689.75], [gd(2013, 1, 17), 1687.25], [gd(2013, 1, 18), 1698.3], [gd(2013, 1, 21), 1696.8], [gd(2013, 1, 22), 1701.3],
+	[gd(2013, 1, 23), 1700.8], [gd(2013, 1, 24), 1686.75], [gd(2013, 1, 25), 1680], [gd(2013, 1, 28), 1668.65], [gd(2013, 1, 29), 1671.2],
+	[gd(2013, 1, 30), 1675.7], [gd(2013, 1, 31), 1684.25]
+];
+
+var data2 = [
+	[gd(2013, 1, 2), 1674.15], [gd(2013, 1, 3), 1680.15], [gd(2013, 1, 4), 1643.8], [gd(2013, 1, 7), 1652.25], [gd(2013, 1, 8), 1640.3],
+	[gd(2013, 1, 9), 1652.75], [gd(2013, 1, 10), 1652.25], [gd(2013, 1, 11), 1664.2], [gd(2013, 1, 14), 1660.7], [gd(2013, 1, 15), 1664.7],
+	[gd(2013, 1, 16), 1673.65], [gd(2013, 1, 17), 1671.15], [gd(2013, 1, 18), 1682.1], [gd(2013, 1, 21), 1680.65], [gd(2013, 1, 22), 1685.1],
+	[gd(2013, 1, 23), 1684.6], [gd(2013, 1, 24), 1670.65], [gd(2013, 1, 25), 1664], [gd(2013, 1, 28), 1652.75], [gd(2013, 1, 29), 1655.25],
+	[gd(2013, 1, 30), 1659.7], [gd(2013, 1, 31), 1668.2]
+];
+
+var dataset = [
+	{
+		label: "Sell out",	// 左上角小標籤的名稱
+		data: data1,	// 要帶入的是data1這一筆資料
+		color: "#FF00FF",	// 小標籤及該筆資料曲線的顏色
+		points: {
+			fillColor: "#FF00FF",	// 該節點的實心顏色
+			show: true	// 是否要顯示節點
+		},
+		lines: {
+			show: true	// 是否要顯示線條
+		}
+	},
+	{
+		label: "Buy in",	// 左上角小標籤的名稱
+		data: data2,	// 要帶入的是data2這一筆資料
+		xaxis: 2,	// 用意不明....??
+		color: "#00FF00",	// 小標籤及該筆資料曲線的顏色
+		points: {
+			fillColor: "#00FF00",	// 該節點的實心顏色
+			show: true	// 是否要顯示節點
+		},
+		lines: {
+			show: true	// 是否要顯示線條
+		}
+	}
+];
+
+var options = {
+	series: {
+		shadowSize: 5	// 曲線的陰影大小
+	},
+	xaxes: [
+		{
+			mode: "time",                
+			tickFormatter: function (val, axis) {	// 要顯示的刻度格式
+				return dayOfWeek[new Date(val).getDay()];
+			},
+			color: "#00FF00",	// 上方X軸的刻度文字顏色
+			position: "top",	// 這一個X軸的刻度要顯示在表格的上方
+			axisLabel: "Day of week",	// 上方X軸的標籤名稱
+			axisLabelUseCanvas: true,	// 是否要使用Canvas
+			axisLabelFontSizePixels: 12,	// X軸標籤名稱的字體大小
+			axisLabelFontFamily: 'Verdana, Arial',	// X軸標籤名稱的字型
+			axisLabelPadding: 5	// X軸標籤名稱，要離Y軸底部多遠
+		},
+		{
+			mode: "time",
+			timeformat: "%m/%d",	// 要顯示的時間格式
+			tickSize: [3, "day"],	// 下方的X軸刻度，以"天"為單位，每3個單位顯示一次!!
+			color: "#FF00FF",	// 下方X軸的刻度文字顏色
+			axisLabel: "Date",	// 下方X軸的標籤名稱
+			axisLabelUseCanvas: true,	// 是否要使用Canvas
+			axisLabelFontSizePixels: 12,	// X軸標籤名稱的字體大小
+			axisLabelFontFamily: 'Verdana, Arial',	// X軸標籤名稱的字型
+			axisLabelPadding: 10	// X軸標籤名稱，要離Y軸底部多遠
+		}
+	],
+	yaxis: {        
+		color: "#000000",	// Y軸刻度的文字顏色
+		tickDecimals: 2,	// 刻度的單位要顯示到小數點後兩位
+		axisLabel: "Gold Price  in USD/oz",	// Y軸的標籤名稱
+		axisLabelUseCanvas: true,	// 是否要使用Canvas
+		axisLabelFontSizePixels: 12,	// X軸標籤名稱的字體大小
+		axisLabelFontFamily: 'Verdana, Arial',	// X軸標籤名稱的字型
+		axisLabelPadding: 5	// X軸標籤名稱，要離Y軸底部多遠
+	},
+	legend: {
+		noColumns: 0,
+		labelFormatter: function (label, series) {	// 小標籤裡的文字樣式
+			return "<font color=\"YELLOW\">" + label + "</font>";
+		},
+		backgroundColor: "#000000",	// 小標籤的背景顏色
+		backgroundOpacity: 0.5,	// 小標籤背景透明度
+		labelBoxBorderColor: "BLUE",	// 小標籤裡每個元素的外框顏色
+		position: "se"
+	},
+	grid: {
+		hoverable: true,	// 當滑鼠游標移至節點上時，是否要變化??
+		borderWidth: 3,	// 整張表格的外框厚度
+		mouseActiveRadius: 50,	// 此一參數不明....
+		backgroundColor: {	// 整張圖表的漸層顏色，由上至下
+			colors: ["#ffffff", "#EDF5FF"]
+		},
+		axisMargin: 20	// 此一參數不明....
+	}
+};
+</script>
+</head>
+<body>
+	<div id="flot_chart" class="ChartStyle"></div>
+</body>
+<script type="text/javascript" language="JavaScript">
+	(function($) {
+		$(document).ready(function () {
+			$.plot($("#flot_chart"), dataset, options);
+			$("#flot_chart").UseTooltip();
+		});
+
+		var previousPoint = null, previousLabel = null;
+		var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+		$.fn.UseTooltip = function () {
+			$(this).bind("plothover", function (event, pos, item) {
+				if (item) {
+					if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
+						previousPoint = item.dataIndex;
+						previousLabel = item.series.label;
+						$("#tooltip").remove();
+
+						var x = item.datapoint[0];
+						var y = item.datapoint[1];
+						var date = new Date(x);
+						var color = item.series.color;
+						// 此一部份也請參考直條圖!!
+						showTooltip(item.pageX, item.pageY, color, "<strong>" + item.series.label + "</strong><br>" + (date.getMonth() + 1) + "/" +
+							date.getDate() + " : <strong>" + y + "</strong> (USD/oz)");
+					}
+				}
+				else {
+					$("#tooltip").remove();
+					previousPoint = null;
+				}
+			});
+		};
+		// 此一部份請參考直條圖!!
+		function showTooltip(x, y, color, contents) {
+			$('<div id="tooltip">' + contents + '</div>').css({
+				position: 'absolute',
+				display: 'none',
+				top: y - 40,
+				left: x - 120,
+				border: '2px solid ' + color,
+				padding: '3px',
+				'font-size': '9px',
+				'border-radius': '5px',
+				'background-color': '#fff',
+				'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+				opacity: 0.9
+			}).appendTo("body").fadeIn(200);
+		}
+		return;
+	})(jQuery);
+</script>
+</html>

@@ -1,0 +1,148 @@
+<!DOCUMENT html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN http://www.w3.prg/TR/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Big5" />
+<meta http-equiv="Pragma" content="no_cache" />
+<meta http-equiv="refresh" content="60"/>
+<title>橫條圖</title>
+<script type="text/javascript" src="./js/jQuery/jquery-1.8.3.min.js"></script>
+<link rel=StyleSheet type="text/css" href="./css/style.min-1.0.0.css" />
+<script type="text/javascript" src="./js/jQuery/excanvas.min.js" language="JavaScript"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.min.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.symbol.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.axislabels.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.time.js"></script>
+<script type="text/javascript" src="./js/jQuery/jshashtable-2.1.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.numberformatter-1.2.3.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+var rawData = [[1582.3, 0], [28.95, 1],[1603, 2],[774, 3],[1245, 4], [85, 5],[1025, 6]];
+// X軸的資料，[value, index]
+
+var dataSet = [
+	{
+		label: "Precious Metal Price",	// 小標籤的文字描述
+		data: rawData,
+		color: "#E8E800"	// 小標籤，及橫條圖的顏色
+	}
+];
+
+var ticks = [[0, "Gold"], [1, "Silver"], [2, "Platinum"], [3, "Palldium"], [4, "Rhodium"], [5, "Ruthenium"], [6, "Iridium"]];
+// Y軸的資料：[index, value]
+
+var options = {
+	series: {
+		bars: {
+			show: true	//  true: 直條圖；false: 曲線圖
+		}
+	},
+	bars: {
+		align: "center",	// Y軸的刻度標的，要顯示在橫條圖的那一邊?? left: 下面；center, right: 中間
+		barWidth: 0.5,	// 橫條圖的寬度
+		horizontal: true,	// true為橫條圖，false為直條圖；但預設值為false
+		fillColor: {	// 橫條圖中所要填滿的顏色
+			colors: [	// 有兩種顏色代表有漸層；opacity的值表透明度：0~1
+				{
+					opacity: 0.5
+				},
+				{
+					opacity: 1
+				}
+			]
+		},
+		lineWidth: 1	// bar的外框厚度
+	},
+	xaxis: {
+		axisLabel: "Price (USD/oz)",
+		axisLabelUseCanvas: true,
+		axisLabelFontSizePixels: 12,
+		axisLabelFontFamily: 'Verdana, Arial',
+		axisLabelPadding: 10,
+		max: 2000,	// X軸的最大值
+		tickColor: "#5E5E5E",	// X軸的刻度線條顏色
+		tickFormatter: function (v, axis) {
+			return $.formatNumber(v, {	// 要如何呈現X軸的刻度格式??
+				format: "#,###",
+				locale: "us"
+			});
+		},
+		color: "#000000"	// X軸的刻度文字顏色
+	},
+	yaxis: {
+		axisLabel: "Precious Metals",
+		axisLabelUseCanvas: true,
+		axisLabelFontSizePixels: 12,
+		axisLabelFontFamily: 'Verdana, Arial',
+		axisLabelPadding: 3,
+		tickColor: "#5E5E5E",	// Y軸的刻度線條顏色
+		ticks: ticks,	// Y軸的刻度資料
+		color: "#000000"	// Y軸的刻度文字顏色
+	},
+	legend: {
+		noColumns: 0,
+		labelBoxBorderColor: "#858585",	// 小標籤的顏色外框的顏色
+		position: "ne"
+	},
+	grid: {
+		hoverable: true,	// 當滑鼠游標移至橫條圖上時，直條圖是否要變化??
+		borderWidth: 2,	// 整張表格的外框厚度
+		backgroundColor: {	// 整張圖表的漸層顏色，由上至下
+			colors: ["#171717", "#4F4F4F"]
+		}
+	}
+};
+</script>
+</head>
+<body>
+	<div id="flot_chart" class="ChartStyle"></div>
+</body>
+<script type="text/javascript" language="JavaScript">
+	(function($) {
+		$(window.document).ready(function () {
+			$.plot($("#flot_chart"), dataSet, options);
+			$("#flot_chart").UseTooltip();
+		});
+
+		var previousPoint = null, previousLabel = null;
+
+		$.fn.UseTooltip = function () {
+			$(this).bind("plothover", function (event, pos, item) {
+				if (item) {
+					if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
+						previousPoint = item.dataIndex;
+						previousLabel = item.series.label;
+						$("#tooltip").remove();
+
+						var x = item.datapoint[0];
+						var y = item.datapoint[1];
+						var color = item.series.color;
+						// 此一部份請參考直條圖!!
+						showTooltip(item.pageX, item.pageY, color, "<strong>" + item.series.label + "</strong><br>" + item.series.yaxis.ticks[y].label +
+							" : <strong>" + $.formatNumber(x, { format: "#,###", locale: "us" }) + "</strong> USD/oz");
+					}
+				}
+				else {
+					$("#tooltip").remove();
+					previousPoint = null;
+				}
+			});
+		};
+
+		function showTooltip(x, y, color, contents) {
+			$('<div id="tooltip">' + contents + '</div>').css({
+				position: 'absolute',
+				display: 'none',
+				top: y - 10,
+				left: x + 10,
+				border: '2px solid ' + color,
+				padding: '3px',
+				'font-size': '9px',
+				'border-radius': '5px',
+				'background-color': '#FFFFFF',
+				'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+				opacity: 0.9
+			}).appendTo("body").fadeIn(200);
+		}
+		return;
+	})(jQuery);
+</script>
+</html>

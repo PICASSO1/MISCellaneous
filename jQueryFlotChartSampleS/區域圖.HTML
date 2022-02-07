@@ -1,0 +1,160 @@
+﻿<!DOCUMENT html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN http://www.w3.prg/TR/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Big5" />
+<meta http-equiv="Pragma" content="no_cache" />
+<meta http-equiv="refresh" content="60"/>
+<title>區域圖</title>
+<script type="text/javascript" src="./js/jQuery/jquery-1.8.3.min.js"></script>
+<link rel=StyleSheet type="text/css" href="./css/style.min-1.0.0.css" />
+<script type="text/javascript" src="./js/jQuery/excanvas.min.js" language="JavaScript"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.min.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.symbol.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.axislabels.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.time.js"></script>
+<script type="text/javascript" src="./js/jQuery/jshashtable-2.1.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.numberformatter-1.2.3.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+function year(year) {
+	return new Date(year, 1, 1).getTime();
+}
+
+var rawData1 = [	// 大洋洲的資料
+	[year(1800), 200], [year(1850), 200], [year(1900), 600], [year(1950), 1281], [year(1955), 1426], [year(1960), 1589], [year(1965), 1766],
+	[year(1970), 1944], [year(1975), 2156], [year(1980), 2283], [year(1985), 2467], [year(1990), 2668], [year(1995), 2892], [year(2000), 3104],
+	[year(2005), 3299], [year(2010), 3510]
+];
+
+var rawData2 = [	// 北美洲的資料
+	[year(1800), 700], [year(1850), 2600], [year(1900), 8200], [year(1950), 17162], [year(1955), 18688], [year(1960), 20415],
+	[year(1965), 21957], [year(1970), 23194], [year(1975), 24343], [year(1980), 25607], [year(1985), 26946], [year(1990), 28355],
+	[year(1995), 29944], [year(2000), 31592], [year(2005), 33216], [year(2010), 34412]
+];
+
+var rawData3 = [	// 拉丁美洲的資料
+	[year(1800), 2400], [year(1850), 3800], [year(1900), 7400], [year(1950), 16710], [year(1955), 19080], [year(1960), 20930],
+	[year(1965), 25045], [year(1970), 28486], [year(1975), 32191], [year(1980), 36140], [year(1985), 40147], [year(1990), 44153],
+	[year(1995), 48110], [year(2000), 52023], [year(2005), 55828], [year(2010), 59095]
+];
+
+var rawData4 = [	// 歐洲的資料
+	[year(1800), 20300], [year(1850), 27600], [year(1900), 40800], [year(1950), 54740], [year(1955), 57518], [year(1960), 60140],
+	[year(1965), 63403], [year(1970), 65586], [year(1975), 67554], [year(1980), 69243], [year(1985), 70601], [year(1990), 72158],
+	[year(1995), 72741], [year(2000), 72799], [year(2005), 72472], [year(2010), 72708]
+];
+
+var rawData5 = [	// 非洲的資料
+	[year(1800), 10700], [year(1850), 11100], [year(1900), 13300], [year(1950), 22121], [year(1955), 24675], [year(1960), 27740],
+	[year(1965), 31374], [year(1970), 35728], [year(1975), 40816], [year(1980), 46962], [year(1985), 54181], [year(1990), 62244],
+	[year(1995), 70746], [year(2000), 79567], [year(2005), 88796], [year(2010), 101296]
+];
+
+var rawData6 = [	// 亞洲的資料
+	[year(1800), 63500], [year(1850), 80900], [year(1900), 94700], [year(1950), 139849], [year(1955), 154195], [year(1960), 167434],
+	[year(1965), 189942], [year(1970), 214312], [year(1975), 239751], [year(1980), 263234], [year(1985), 288755], [year(1990), 316781],
+	[year(1995), 343005], [year(2000), 367974], [year(2005), 391751], [year(2010), 411963]
+];
+
+var dataSet = [	// [小標籤的文字描述；要帶入的是那一筆資料；小標籤，及該區域的顏色]
+	{ label: "Asia", data: rawData6, color: "#0077FF"	},
+	{ label: "Africa", data: rawData5, color: "#7D0096" },
+	{ label: "Europe", data: rawData4, color: "#DE000F" },
+	{ label: "Latin America", data: rawData3, color: "#00B503" },
+	{ label: "North America", data: rawData2, color: "#ED7B00" },
+	{ label: "Oceania", data: rawData1, color: "#E8E800" }
+];
+
+var options = {
+	series: { lines: { show: true, fill: true } },
+	xaxis: {
+		mode: "time",
+		tickSize: [20, "year"],	// 以年為單位，每20年顯示一個刻度
+		timeformat: "%Y",	// 顯示時間的格式
+		axisLabel: "Year",	// X軸的標籤
+		axisLabelUseCanvas: true,
+		axisLabelFontSizePixels: 12,
+		axisLabelFontFamily: 'Verdana, Arial',
+		axisLabelPadding: 10
+	},
+	yaxis: {
+		axisLabel: "Population (multiply by 10,000)",	// Y軸的標籤
+		axisLabelUseCanvas: true,
+		axisLabelFontSizePixels: 12,
+		axisLabelFontFamily: 'Verdana, Arial',
+		axisLabelPadding: 3,
+		tickFormatter: function (v, axis) {
+			return $.formatNumber(v, {
+				format: "#,###",
+				locale: "us"
+			});
+		}
+	},
+	legend: {
+		noColumns: 3,
+		labelBoxBorderColor: "#858585",
+		position: "nw"
+	},
+	grid: {
+		hoverable: true,	// 當滑鼠游標移至區域圖上時，區域圖是否要變化??
+		borderWidth: 2,	// 整張表格的外框厚度
+		backgroundColor: {	// 整張圖表的漸層顏色，由上至下
+			colors: ["#FFFFFF", "#EDF5FF"]
+		}
+	}
+};
+</script>
+</head>
+<body>
+	<div id="flot_chart" class="ChartStyle"></div>
+</body>
+<script type="text/javascript" language="JavaScript">
+	(function($) {
+		$(document).ready(function () {
+			$.plot($("#flot_chart"), dataSet, options);    
+			$("#flot_chart").UseTooltip();
+		});
+
+		var previousPoint = null, previousLabel = null;
+
+		$.fn.UseTooltip = function () {
+			$(this).bind("plothover", function (event, pos, item) {
+				if (item) {
+					if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
+						previousPoint = item.dataIndex;
+						previousLabel = item.series.label;
+						$("#tooltip").remove();
+
+						var x = item.datapoint[0];
+						var y = item.datapoint[1];
+						var color = item.series.color;
+                
+						showTooltip(item.pageX, item.pageY, color, "<strong>" + item.series.label + "</strong><br>" + new Date(x).getFullYear() +
+							" : <strong>Population : " + $.formatNumber(y, { format: "#,###", locale: "us" }) + "</strong>  (multiply by 10,000)");
+					}
+				}
+				else {
+					$("#tooltip").remove();
+					previousPoint = null;
+				}
+			});
+		};
+
+		function showTooltip(x, y, color, contents) {
+			$('<div id="tooltip">' + contents + '</div>').css({
+				position: 'absolute',
+				display: 'none',
+        top: y - 10,
+        left: x + 10,
+        border: '2px solid ' + color,
+        padding: '3px',
+        'font-size': '9px',
+        'border-radius': '5px',
+        'background-color': '#FFFFFF',
+        'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+        opacity: 0.9
+			}).appendTo("body").fadeIn(200);
+		}
+		return;
+	})(jQuery);
+</script>
+</html>

@@ -1,0 +1,202 @@
+﻿<!DOCUMENT html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN http://www.w3.prg/TR/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Big5" />
+<meta http-equiv="Pragma" content="no_cache" />
+<meta http-equiv="refresh" content="60"/>
+<title>多軸圖</title>
+<script type="text/javascript" src="./js/jQuery/jquery-1.8.3.min.js"></script>
+<link rel=StyleSheet type="text/css" href="./css/style.min-1.0.0.css" />
+<script type="text/javascript" src="./js/jQuery/excanvas.min.js" language="JavaScript"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.min.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.symbol.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.axislabels.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.time.js"></script>
+<script type="text/javascript" src="./js/jQuery/jshashtable-2.1.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.numberformatter-1.2.3.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+// Sin(x)
+var data1 = [
+	[0, 0.09983], [1, 0.19867], [2, 0.29552], [3, 0.38942], [4, 0.47943], [5, 0.56464], [6, 0.64422], [7, 0.71736], [8, 0.78333], [9, 0.84147],
+	[10, 0.89121], [11, 0.93204], [12, 0.96356], [13, 0.98545], [14, 0.99749], [15, 0.99957], [16, 0.99166], [17, 0.97385], [18, 0.9463],
+	[19, 0.9093], [20, 0.86321], [21, 0.8085], [22, 0.74571], [23, 0.67546], [24, 0.59847], [25, 0.5155], [26, 0.42738], [27, 0.33499],
+	[28, 0.23925], [29, 0.14112], [30, 0.04158], [31, -0.05837], [32, -0.15775], [33, -0.25554], [34, -0.35078], [35, -0.44252],
+	[36, -0.52984], [37, -0.61186], [38, -0.68777], [39, -0.7568], [40, -0.81828], [41, -0.87158], [42, -0.91617], [43, -0.9516],
+	[44, -0.97753], [45, -0.99369], [46, -0.99992], [47, -0.99616], [48, -0.98245], [49, -0.95892], [50, -0.92581]
+];
+// Cos(x)
+var data2 = [
+	[0, 0.995], [1, 0.98007], [2, 0.95534], [3, 0.92106], [4, 0.87758], [5, 0.82534], [6, 0.76484], [7, 0.69671], [8, 0.62161], [9, 0.5403],
+	[10, 0.4536], [11, 0.36236], [12, 0.2675], [13, 0.16997], [14, 0.07074], [15, -0.0292], [16, -0.12884], [17, -0.2272], [18, -0.32329],
+	[19, -0.41615], [20, -0.50485], [21, -0.5885], [22, -0.66628], [23, -0.73739], [24, -0.80114], [25, -0.85689], [26, -0.90407],
+	[27, -0.94222], [28, -0.97096], [29, -0.98999], [30, -0.99914], [31, -0.99829], [32, -0.98748], [33, -0.9668], [34, -0.93646],
+	[35, -0.89676], [36, -0.8481], [37, -0.79097], [38, -0.72593], [39, -0.65364], [40, -0.57482], [41, -0.49026], [42, -0.4008],
+	[43, -0.30733], [44, -0.2108], [45, -0.11215], [46, -0.01239], [47, 0.0875], [48, 0.18651], [49, 0.28366], [50, 0.37798]
+];
+// PI * x
+var data3 = [
+	[0, 0.31416], [1, 0.62832], [2, 0.94248], [3, 1.25664], [4, 1.5708], [5, 1.88496], [6, 2.19911], [7, 2.51327], [8, 2.82743], [9, 3.14159],
+	[10, 3.45575], [11, 3.76991], [12, 4.08407], [13, 4.39823], [14, 4.71239], [15, 5.02655], [16, 5.34071], [17, 5.65487], [18, 5.96903],
+	[19, 6.28319], [20, 6.59734], [21, 6.9115], [22, 7.22566], [23, 7.53982], [24, 7.85398], [25, 8.16814], [26, 8.4823], [27, 8.79646],
+	[28, 9.11062], [29, 9.42478], [30, 9.73894], [31, 10.0531], [32, 10.36726], [33, 10.68142], [34, 10.99557], [35, 11.30973], [36, 11.62389],
+	[37, 11.93805], [38, 12.25221], [39, 12.56637], [40, 12.88053], [41, 13.19469], [42, 13.50885], [43, 13.82301], [44, 14.13717],
+	[45, 14.45133], [46, 14.76549], [47, 15.07964], [48, 15.3938], [49, 15.70796], [50, 16.02212]    
+];
+
+var dataset = [
+	{
+		label: "Sin(x)",	// 小標籤的文字描述
+		data: data1,	// 要用那一筆資料帶入
+		yaxis: 2,	// 要對應到yaxis的序號2
+		color: "#FF0000",
+		points: {
+			symbol: "circle",
+			fillColor: "#FF0000",
+			show: true
+		},
+		lines: {
+			show: true
+		}
+	},
+	{
+		label: "Cos(x)",
+		data: data2,
+		yaxis: 1,	// 要對應到yaxis的序號1
+		color: "#0062FF",	// 小標籤，及該筆多軸線的顏色
+		points: {
+			symbol: "triangle",
+			fillColor: "#0062FF",
+			show: true
+		},
+		lines: {
+			show: true,	// 是否要顯示線條
+			fill: true	// 該多軸圖的區域是否要填滿?
+		}
+	},
+	{
+		label: "PI * x",
+		data: data3,
+		yaxis: 3,	// 要對應到yaxis的序號3
+		color: "#319400",
+		points: {
+			symbol: "diamond",	// 該節點以"菱形"呈現.
+			fillColor: "#319400",	// 節點實心的顏色
+			show: true	// 是否要顯示節點
+		},
+		lines: {
+			show: true
+		}
+	}
+];
+
+var options = {
+	xaxis: { ticks: [] },
+	yaxes: [
+		{
+			position: "left",
+			color: "#FF0000",
+			axisLabel: "Sin(x)",
+			axisLabelUseCanvas: true,
+			axisLabelFontSizePixels: 15,
+			axisLabelFontFamily: 'Verdana, Arial',
+			axisLabelPadding: 3
+		},
+		{
+			position: "right",
+			color: "#0062FF",
+			axisLabel: "Cos(x)",
+			axisLabelUseCanvas: true,
+			axisLabelFontSizePixels: 15,
+			axisLabelFontFamily: 'Verdana, Arial',
+			axisLabelPadding: 3
+		},
+		{
+			alignTicksWithAxis: 2,
+			position: "right",
+			color: "#319400",
+			axisLabel: "PI * x",
+			axisLabelUseCanvas: true,
+			axisLabelFontSizePixels: 15,
+			axisLabelFontFamily: 'Verdana, Arial',
+			axisLabelPadding: 3
+		}
+	],
+	legend: {
+		noColumns: 0,
+		labelFormatter: function (label, series) {
+			return "<font color=\"YELLOW\">" + label + "</font>";
+		},            
+		backgroundColor: "#000000",
+		backgroundOpacity: 0.5,
+		labelBoxBorderColor: "#000000",
+		position: "se"
+	},
+	grid: {
+		hoverable: true,
+		borderWidth: 3,
+		mouseActiveRadius: 50,
+		backgroundColor: {
+			colors: ["#ffffff", "#EDF5FF"]
+		},
+		axisMargin: 20
+	}
+};
+</script>
+</head>
+<body>
+	<div id="flot_chart" class="ChartStyle"></div>
+</body>
+<script type="text/javascript" language="JavaScript">
+	(function($) {
+		$(window.document).ready(function () {
+			$.plot($("#flot_chart"), dataset, options);
+			$("#flot_chart").UseTooltip();
+		});
+
+		function gd(year, month, day) {
+			return new Date(year, month - 1, day).getTime();
+		}
+
+		var previousPoint = null, previousLabel = null;
+
+		$.fn.UseTooltip = function () {
+			$(this).bind("plothover", function (event, pos, item) {
+				if (item) {
+					if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
+						previousPoint = item.dataIndex;
+						previousLabel = item.series.label;
+						$("#tooltip").remove();
+
+						var x = item.datapoint[0];
+						var y = item.datapoint[1];
+						var color = item.series.color;
+
+						showTooltip(item.pageX, item.pageY, color, "<strong>" + item.series.label + "</strong>" + " : <strong>" + y + "</strong> ");
+					}
+				}
+				else {
+					$("#tooltip").remove();
+					previousPoint = null;
+				}
+			});
+		};
+
+		function showTooltip(x, y, color, contents) {
+			$('<div id="tooltip">' + contents + '</div>').css({
+				position: 'absolute',
+				display: 'none',
+				top: y - 40,
+				left: x - 120,
+				border: '2px solid ' + color,
+				padding: '3px',
+        'font-size': '9px',
+        'border-radius': '5px',
+        'background-color': '#fff',
+        'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+        opacity: 0.9
+			}).appendTo("body").fadeIn(200);
+		}
+		return;
+	})(jQuery);
+</script>
+</html>

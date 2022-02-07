@@ -1,0 +1,129 @@
+<!DOCUMENT html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN http://www.w3.prg/TR/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Big5" />
+<meta http-equiv="Pragma" content="no_cache" />
+<meta http-equiv="refresh" content="60"/>
+<title>直條圖</title>
+<script type="text/javascript" src="./js/jQuery/jquery-1.8.3.min.js"></script>
+<link rel=StyleSheet type="text/css" href="./css/style.min-1.0.0.css" />
+<script type="text/javascript" src="./js/jQuery/excanvas.min.js" language="JavaScript"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.min.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.symbol.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.axislabels.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.time.js"></script>
+<script type="text/javascript" src="./js/jQuery/jshashtable-2.1.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.numberformatter-1.2.3.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+var data = [[0, 11],[1, 15],[2, 25],[3, 24],[4, 13],[5, 18]];
+//Y軸的資料：[index, value]
+
+var dataset = [
+	{
+		label: "2012 Average Temperature",	// 小標籤的文字描述
+		data: data,
+		color: "#5482FF"	// 小標籤，及直條圖外框的顏色
+	}
+];
+
+var ticks = [[0, "London"], [1, "New York"], [2, "New Delhi"], [3, "Taipei"],[4, "Beijing"], [5, "Sydney"]];
+//X軸的資料：[index, value]
+
+var options = {
+	series: {
+		bars: {
+			show: true	// true: 直條圖；false: 曲線圖
+		}
+	},
+	bars: {
+		align: "center",	// X軸的刻度標的，要顯示在直條圖的那一邊??
+		barWidth: 0.5	// 直條圖的寬度
+	},
+	xaxis: {
+		axisLabel: "World Cities",	// X軸的標籤名稱
+		axisLabelUseCanvas: true,	// 是否要使用Canvas
+		axisLabelFontSizePixels: 12,	// X軸標籤名稱的字體大小
+		axisLabelFontFamily: 'Verdana, Arial',	// X軸標籤名稱的字型
+		axisLabelPadding: 10,	// X軸標籤名稱，要離Y軸底部多遠
+		ticks: ticks	// X軸的刻度資料
+	},
+	yaxis: {
+		axisLabel: "Average Temperature",	// Y軸的標籤名稱
+		axisLabelUseCanvas: true,	// 是否要使用Canvas
+		axisLabelFontSizePixels: 12,	// Y軸標籤名稱的字體大小
+		axisLabelFontFamily: 'Verdana, Arial',	// Y軸標籤名稱的字型
+		axisLabelPadding: 3,	// Y軸標籤名稱，要離X軸最左邊多遠
+		tickFormatter: function (v, axis) {	// 要如何呈現Y軸的刻度格式??
+			return v + "&deg;C";
+		}
+	},
+	legend: {
+		noColumns: 0,
+		labelBoxBorderColor: "#000000",
+		position: "nw"	// 小標籤要呈現在表格的那裡?? nw: 左上；ne: 右上；se: 右下；sw: 左下
+	},
+	grid: {
+		hoverable: true,	// 當滑鼠游標移至直條圖上時，直條圖是否要變化??
+		borderWidth: 2,	// 整張表格的外框厚度
+		backgroundColor: {	// 整張圖表的漸層顏色，由上至下
+			colors: ["#FFFFFF", "#EDF5FF"]
+		}
+	}
+};
+</script>
+</head>
+<body>
+	<div id="flot_chart" class="ChartStyle"></div>
+</body>
+<script type="text/javascript" language="JavaScript">
+	(function($) {
+		$(window.document).ready(function () {
+			$.plot($("#flot_chart"), dataset, options);
+			$("#flot_chart").UseTooltip();
+		});
+ 
+		var previousPoint = null, previousLabel = null;
+
+		$.fn.UseTooltip = function () {
+			$(this).bind("plothover", function (event, pos, item) {
+				if (item) {
+					if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
+						previousPoint = item.dataIndex;
+						previousLabel = item.series.label;
+						$("#tooltip").remove();
+
+						var x = item.datapoint[0];
+						var y = item.datapoint[1];
+						var color = item.series.color;
+					//console.log(item.series.xaxis.ticks[x].label);               
+
+						showTooltip(item.pageX, item.pageY, color, "<strong>" + item.series.label + "</strong><br>" + item.series.xaxis.ticks[x].label +
+							" : <strong>" + y + "</strong> &deg;C");
+					}
+				}
+				else {
+					$("#tooltip").remove();
+					previousPoint = null;
+				}
+			});
+		};
+
+		function showTooltip(x, y, color, contents) {	// 當滑鼠游標移至長條圖上時，所呈現的小提示....
+			$('<div id="tooltip">' + contents + '</div>').css({
+				position: 'absolute',
+				display: 'none',
+				top: y - 40,
+				left: x - 120,
+				border: '2px solid ' + color,	// 小提示的外框厚度
+				padding: '3px',	// 小提示的外框要離文字內容的距離
+				'font-size': '9px',	// 小提示裡的字型大小
+				'border-radius': '5px',
+				'background-color': '#FFFFFF',	// 小提示的背景顏色
+				'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',	// 小提示的字體
+				opacity: 0.9	// 透明度：0~1
+			}).appendTo("body").fadeIn(200);
+		}
+		return;
+	})(jQuery);
+</script>
+</html>

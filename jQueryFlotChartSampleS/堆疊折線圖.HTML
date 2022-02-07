@@ -1,0 +1,169 @@
+﻿<!DOCUMENT html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN http://www.w3.prg/TR/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Big5" />
+<meta http-equiv="Pragma" content="no_cache" />
+<meta http-equiv="refresh" content="60"/>
+<title>堆疊折線圖</title>
+<script type="text/javascript" src="./js/jQuery/jquery-1.8.3.min.js"></script>
+<link rel=StyleSheet type="text/css" href="./css/style.min-1.0.0.css" />
+<script type="text/javascript" src="./js/jQuery/excanvas.min.js" language="JavaScript"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.min.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.symbol.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.axislabels.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.time.js"></script>
+<script type="text/javascript" src="./js/jQuery/jshashtable-2.1.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.numberformatter-1.2.3.min.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.stack.js"></script>
+<script type="text/javascript" language="JavaScript">
+function gd(year, month, day) {
+	return new Date(year, month - 1, day).getTime();
+}
+
+var data1 = [	// 1st筆資料: example1.com
+	[gd(2012, 1, 1), 208557], [gd(2012, 1, 2), 125068], [gd(2012, 1, 3), 931208], [gd(2012, 1, 4), 450040], [gd(2012, 1, 5), 761180],
+	[gd(2012, 1, 6), 744526], [gd(2012, 1, 7), 707095], [gd(2012, 1, 8), 601316], [gd(2012, 1, 9), 187495], [gd(2012, 1, 10), 716189],
+	[gd(2012, 1, 11), 587141], [gd(2012, 1, 12), 147266], [gd(2012, 1, 13), 574670], [gd(2012, 1, 14), 175881], [gd(2012, 1, 15), 272519],
+	[gd(2012, 1, 16), 211131], [gd(2012, 1, 17), 637015], [gd(2012, 1, 18), 794050], [gd(2012, 1, 19), 399010], [gd(2012, 1, 20), 799942],
+	[gd(2012, 1, 21), 595768], [gd(2012, 1, 22), 717126], [gd(2012, 1, 23), 414923], [gd(2012, 1, 24), 462479], [gd(2012, 1, 25), 674334],
+	[gd(2012, 1, 26), 20312], [gd(2012, 1, 27), 675892], [gd(2012, 1, 28), 808655], [gd(2012, 1, 29), 194543], [gd(2012, 1, 30), 664716],
+	[gd(2012, 1, 31), 980720]
+];
+
+var data2 = [	// 2nd筆資料: example2.com
+	[gd(2012, 1, 1), 809706], [gd(2012, 1, 2), 682787], [gd(2012, 1, 3), 359835], [gd(2012, 1, 4), 374451], [gd(2012, 1, 5), 648704],
+	[gd(2012, 1, 6), 219730], [gd(2012, 1, 7), 961114], [gd(2012, 1, 8), 480190], [gd(2012, 1, 9), 756578], [gd(2012, 1, 10), 858581],
+	[gd(2012, 1, 11), 606085], [gd(2012, 1, 12), 855877], [gd(2012, 1, 13), 644309], [gd(2012, 1, 14), 874494], [gd(2012, 1, 15), 714742],
+	[gd(2012, 1, 16), 447174], [gd(2012, 1, 17), 721736], [gd(2012, 1, 18), 392072], [gd(2012, 1, 19), 595023], [gd(2012, 1, 20), 881968],
+	[gd(2012, 1, 21), 899978], [gd(2012, 1, 22), 269944], [gd(2012, 1, 23), 29627], [gd(2012, 1, 24), 384853], [gd(2012, 1, 25), 491430],
+	[gd(2012, 1, 26), 710143], [gd(2012, 1, 27), 481074], [gd(2012, 1, 28), 775704], [gd(2012, 1, 29), 753212], [gd(2012, 1, 30), 80979],
+	[gd(2012, 1, 31), 898438]
+];
+
+var data3 = [	// 3rd筆資料: example3.com
+	[gd(2012, 1, 1), 419117], [gd(2012, 1, 2), 522777], [gd(2012, 1, 3), 735468], [gd(2012, 1, 4), 777434], [gd(2012, 1, 5), 464478],
+	[gd(2012, 1, 6), 227180], [gd(2012, 1, 7), 801428], [gd(2012, 1, 8), 623814], [gd(2012, 1, 9), 991399], [gd(2012, 1, 10), 675899],
+	[gd(2012, 1, 11), 326205], [gd(2012, 1, 12), 642431], [gd(2012, 1, 13), 941359], [gd(2012, 1, 14), 989682], [gd(2012, 1, 15), 861248],
+	[gd(2012, 1, 16), 770613], [gd(2012, 1, 17), 587983], [gd(2012, 1, 18), 959591], [gd(2012, 1, 19), 573137], [gd(2012, 1, 20), 954154],
+	[gd(2012, 1, 21), 428928], [gd(2012, 1, 22), 599519], [gd(2012, 1, 23), 782747], [gd(2012, 1, 24), 93086], [gd(2012, 1, 25), 552106],
+	[gd(2012, 1, 26), 665504], [gd(2012, 1, 27), 974980], [gd(2012, 1, 28), 883020], [gd(2012, 1, 29), 938559], [gd(2012, 1, 30), 738654],
+	[gd(2012, 1, 31), 197755]
+];
+
+var dataset = [
+	{
+		label: "example1.com",	// 小標籤的文字描述
+		data: data1,
+		color: "#0077FF"
+	},
+	{
+		label: "example2.com",
+		data: data2,	// 這個Label將帶入的是那一筆資料....
+		color: "#7D0096"
+	},
+	{
+		label: "example3.com",
+		data: data3,
+		color: "#DE000F"	// 小標籤，及堆疊圖外框的顏色
+	}
+];
+
+var options = {
+	series: {
+		stack: true,	// 是否要以堆疊圖方式呈現；但看不出true和false的差異
+		lines: {
+			show: true,	// 是否顯示線條
+			fill: true	// 堆疊區塊是否要填滿
+		}
+	},
+	xaxis: {
+		mode: "time",	// X軸的資料格式，為"時間"
+		tickSize: [3, "day"],	// 以"天"為單位，每隔"3天"就顯示出來!!
+		tickLength: 10,	// X軸的刻度，往下延伸要多長??
+		color: "#000000",	// X軸的刻度文字顏色
+		axisLabel: "Date",	// X軸的標籤名稱
+		axisLabelUseCanvas: true,	// 是否要使用Canvas
+		axisLabelFontSizePixels: 12,	// X軸標籤名稱的字體大小
+		axisLabelFontFamily: 'Verdana, Arial',	// X軸標籤名稱的字型
+		axisLabelPadding: 10	// X軸標籤名稱，要離Y軸底部多遠
+	},
+	yaxis: {
+		color: "#000000",	// Y軸的刻度文字顏色
+		axisLabel: "DNS Query Count",	// Y軸的標籤名稱
+		axisLabelUseCanvas: true,	// 是否要使用Canvas
+		axisLabelFontSizePixels: 12,	// X軸標籤名稱的字體大小
+		axisLabelFontFamily: 'Verdana, Arial',	// X軸標籤名稱的字型
+		axisLabelPadding: 3,	// X軸標籤名稱，要離Y軸底部多遠
+		tickFormatter: function (v, axis) {	// 要如何呈現Y軸的刻度格式??
+			return $.formatNumber(v, {
+				format: "#,###",
+				locale: "us"
+			});
+		}
+	},
+	grid: {
+		hoverable: true,	// 當滑鼠游標移至橫條圖上時，直條圖是否要變化??
+		borderWidth: 2,	// 整張表格的外框厚度
+		backgroundColor: {	// 整張圖表的漸層顏色，由上至下
+			colors: ["#EDF5FF", "#ffffff"]
+		}
+	}
+};
+</script>
+</head>
+<body>
+	<div id="flot_chart" class="ChartStyle"></div>
+</body>
+<script type="text/javascript" language="JavaScript">
+	(function($) {
+		$(document).ready(function () {
+			$.plot($("#flot_chart"), dataset, options);
+			$("#flot_chart").UseTooltip();
+		});
+
+		var previousPoint = null, previousLabel = null;
+		var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+		$.fn.UseTooltip = function () {
+			$(this).bind("plothover", function (event, pos, item) {
+				if (item) {
+					if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
+						previousPoint = item.dataIndex;
+						previousLabel = item.series.label;
+						$("#tooltip").remove();
+
+						var x = item.datapoint[0];
+						var y = item.datapoint[1];
+						var color = item.series.color;
+						var day = "Jan " + new Date(x).getDate();
+						// 此一部份請參考直條圖!!
+						showTooltip(item.pageX, item.pageY, color, "<strong>" + item.series.label + "</strong><br>" + day + " : <strong>" +
+							$.formatNumber(y, { format: "#,###", locale: "us" }) + "</strong>(Count)");
+					}
+				}
+				else {
+					$("#tooltip").remove();
+					previousPoint = null;
+				}
+			});
+		};
+
+		function showTooltip(x, y, color, contents) {
+			$('<div id="tooltip">' + contents + '</div>').css({
+				position: 'absolute',
+				display: 'none',
+				top: y - 40,
+				left: x - 120,
+				border: '2px solid ' + color,
+				padding: '3px',
+				'font-size': '9px',
+				'border-radius': '5px',
+				'background-color': '#fff',
+				'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+				opacity: 0.9
+			}).appendTo("body").fadeIn(200);
+		}
+		return;
+	})(jQuery);
+</script>
+</html>

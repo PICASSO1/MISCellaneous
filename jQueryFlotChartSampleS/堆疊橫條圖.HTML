@@ -1,0 +1,176 @@
+﻿<!DOCUMENT html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN http://www.w3.prg/TR/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Big5" />
+<meta http-equiv="Pragma" content="no_cache" />
+<meta http-equiv="refresh" content="60"/>
+<title>堆疊橫條圖</title>
+<script type="text/javascript" src="./js/jQuery/jquery-1.8.3.min.js"></script>
+<link rel=StyleSheet type="text/css" href="./css/style.min-1.0.0.css" />
+<script type="text/javascript" src="./js/jQuery/excanvas.min.js" language="JavaScript"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.min.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.symbol.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.axislabels.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.time.js"></script>
+<script type="text/javascript" src="./js/jQuery/jshashtable-2.1.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.numberformatter-1.2.3.min.js"></script>
+<script type="text/javascript" src="./js/jQuery/jquery.flot.stack.js"></script>
+<script type="text/javascript" language="JavaScript">
+// 堆疊橫條圖的相關設定請參閱堆疊折線圖和堆疊直條圖!!
+function gd(year, month, day) {
+	return new Date(year, month - 1, day).getTime();
+}
+
+var data1 = [
+	[569106, gd(2012, 1, 1)], [743944, gd(2012, 1, 2)], [120865, gd(2012, 1, 3)], [890208, gd(2012, 1, 4)], [259723, gd(2012, 1, 5)],
+	[177150, gd(2012, 1, 6)], [32430, gd(2012, 1, 7)], [274054, gd(2012, 1, 8)], [63435, gd(2012, 1, 9)], [994514, gd(2012, 1, 10)],
+	[885453, gd(2012, 1, 11)], [289791, gd(2012, 1, 12)], [411717, gd(2012, 1, 13)], [95324, gd(2012, 1, 14)], [646479, gd(2012, 1, 15)],
+	[448868, gd(2012, 1, 16)], [669678, gd(2012, 1, 17)], [909944, gd(2012, 1, 18)], [675965, gd(2012, 1, 19)], [281272, gd(2012, 1, 20)],
+	[629781, gd(2012, 1, 21)], [330138, gd(2012, 1, 22)], [802835, gd(2012, 1, 23)], [139079, gd(2012, 1, 24)], [187101, gd(2012, 1, 25)],
+	[354332, gd(2012, 1, 26)], [361090, gd(2012, 1, 27)], [78171, gd(2012, 1, 28)], [452212, gd(2012, 1, 29)], [404369, gd(2012, 1, 30)],
+	[63509, gd(2012, 1, 31)]
+];
+
+var data2 = [
+	[71013, gd(2012, 1, 1)], [982136, gd(2012, 1, 2)], [986125, gd(2012, 1, 3)], [310176, gd(2012, 1, 4)], [480149, gd(2012, 1, 5)],
+	[855033, gd(2012, 1, 6)], [951707, gd(2012, 1, 7)], [85627, gd(2012, 1, 8)], [200090, gd(2012, 1, 9)], [270703, gd(2012, 1, 10)],
+	[884300, gd(2012, 1, 11)], [916445, gd(2012, 1, 12)], [800482, gd(2012, 1, 13)], [561628, gd(2012, 1, 14)], [587988, gd(2012, 1, 15)],
+	[811298, gd(2012, 1, 16)], [482483, gd(2012, 1, 17)], [990815, gd(2012, 1, 18)], [427122, gd(2012, 1, 19)], [804000, gd(2012, 1, 20)],
+	[852740, gd(2012, 1, 21)], [259081, gd(2012, 1, 22)], [564270, gd(2012, 1, 23)], [597728, gd(2012, 1, 24)], [251313, gd(2012, 1, 25)],
+	[941107, gd(2012, 1, 26)], [981784, gd(2012, 1, 27)], [715451, gd(2012, 1, 28)], [905390, gd(2012, 1, 29)], [816059, gd(2012, 1, 30)],
+	[954258, gd(2012, 1, 31)]
+];
+
+var data3 = [
+	[821841, gd(2012, 1, 1)], [659065, gd(2012, 1, 2)], [943350, gd(2012, 1, 3)], [826785, gd(2012, 1, 4)], [307653, gd(2012, 1, 5)],
+	[425591, gd(2012, 1, 6)], [785147, gd(2012, 1, 7)], [178674, gd(2012, 1, 8)], [593834, gd(2012, 1, 9)], [717970, gd(2012, 1, 10)],
+	[836661, gd(2012, 1, 11)], [488220, gd(2012, 1, 12)], [22914, gd(2012, 1, 13)], [745480, gd(2012, 1, 14)], [413691, gd(2012, 1, 15)],
+	[14697, gd(2012, 1, 16)], [577450, gd(2012, 1, 17)], [599112, gd(2012, 1, 18)], [543033, gd(2012, 1, 19)], [878605, gd(2012, 1, 20)],
+	[87354, gd(2012, 1, 21)], [37434, gd(2012, 1, 22)], [600368, gd(2012, 1, 23)], [210767, gd(2012, 1, 24)], [811930, gd(2012, 1, 25)],
+	[430210, gd(2012, 1, 26)], [400741, gd(2012, 1, 27)], [71207, gd(2012, 1, 28)], [539040, gd(2012, 1, 29)], [873247, gd(2012, 1, 30)],
+	[248600, gd(2012, 1, 31)]
+];
+
+var dataset = [
+	{
+		label: "example1.com",
+		data: data1,
+		color: "#0077FF"
+	},
+	{
+		label: "example2.com",
+		data: data2,
+		color: "#7D0096"
+	},
+	{
+		label: "example3.com",
+		data: data3,
+		color: "#FF0011"
+	}
+];
+
+var options = {
+	series: {
+	stack: true,
+		bars: {
+			show: true
+		}
+	},
+	bars: {
+		lineWidth: 1,	// 好像是bar外框的厚度....
+		barWidth: 24 * 60 * 60 * 450,
+		horizontal: true
+	},
+	xaxis: {
+		color: "black",
+		axisLabel: "Date",
+		axisLabelUseCanvas: true,
+		axisLabelFontSizePixels: 12,
+		axisLabelFontFamily: 'Verdana, Arial',
+		axisLabelPadding: 10,
+		tickFormatter: function (v, axis) {
+			return $.formatNumber(v, {
+				format: "#,###",
+				locale: "us"
+			});
+		}
+	},
+	yaxis: {
+		mode: "time",
+		tickSize: [3, "day"],
+		min: gd(2012, 1, 1),
+		max: gd(2012, 1, 31),
+		tickLength: 10, 
+		color: "black",
+		axisLabel: "DNS Query Count",
+		axisLabelUseCanvas: true,
+		axisLabelFontSizePixels: 12,
+		axisLabelFontFamily: 'Verdana, Arial',
+		axisLabelPadding: 3
+	},
+	grid: {
+		hoverable: true,
+		borderWidth: 2,
+		backgroundColor: {
+			colors: ["#EDF5FF", "#ffffff"]
+		}
+	}
+};
+</script>
+</head>
+<body>
+	<div id="flot_chart" class="ChartStyle"></div>
+</body>
+<script type="text/javascript" language="JavaScript">
+	(function($) {
+		$(document).ready(function () {
+			$.plot($("#flot_chart"), dataset, options);
+			$("#flot_chart").UseTooltip();
+		});
+
+		var previousPoint = null, previousLabel = null;
+		var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+		$.fn.UseTooltip = function () {
+			$(this).bind("plothover", function (event, pos, item) {
+				if (item) {
+					if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
+						previousPoint = item.dataIndex;
+						previousLabel = item.series.label;
+						$("#tooltip").remove();
+
+						var x = item.datapoint[0];
+						var y = item.datapoint[1];
+						var color = item.series.color;
+						var day = "Jan " + new Date(y).getDate();
+
+						showTooltip(item.pageX, item.pageY, color, "<strong>" + item.series.label + "</strong><br>" + day + " : <strong>" +
+							$.formatNumber(x, { format: "#,###", locale: "us" }) + "</strong>(Count)");
+					}
+				}
+				else {
+					$("#tooltip").remove();
+					previousPoint = null;
+				}
+			});
+		};
+
+		function showTooltip(x, y, color, contents) {
+			$('<div id="tooltip">' + contents + '</div>').css({
+				position: 'absolute',
+				display: 'none',
+				top: y - 60,
+				left: x - 120,
+				border: '2px solid ' + color,
+				padding: '3px',
+				'font-size': '9px',
+				'border-radius': '5px',
+				'background-color': '#fff',
+				'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+				opacity: 0.9
+			}).appendTo("body").fadeIn(200);
+		}
+		return;
+	})(jQuery);
+</script>
+</html>

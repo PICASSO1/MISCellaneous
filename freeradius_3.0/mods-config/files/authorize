@@ -218,3 +218,5 @@ DEFAULT	Hint == "SLIP"
 # See the example user "bob" above.                     #
 #########################################################
 
+testtest Cleartext-Password := "0987654321"
+
